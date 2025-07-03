@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aero Health Simulator</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #overlay {
+      position: absolute; top: 10px; left: 10px;
+      color: #fff; font-family: sans-serif;
+      background: rgba(0,0,0,0.4); padding: 8px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    Anomaly Score: <span id="score">–</span>
+  </div>
+
+  <!-- Kick off your app -->
+  <script type="module">
+  import * as THREE from 'https://unpkg.com/three@0.152.0/build/three.module.js';
+  import { GLTFLoader } from 'https://unpkg.com/three@0.152.0/examples/jsm/loaders/GLTFLoader.js';
+
+  window.THREE = THREE;
+  window.GLTFLoader = GLTFLoader;
+
+  import('/js/websocket-client.js');
+  import('/js/simulation.js');
+</script>
+
+</body>
+</html>
