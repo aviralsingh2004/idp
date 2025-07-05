@@ -1,16 +1,14 @@
-import Scene from './viewer/Scene';
+import Scene from "./component/Scene";
+import "./App.css";
 
 function App() {
   return (
-    <>
-      <div style={{
-        position: 'absolute', top: 10, left: 10, color: 'white',
-        background: 'rgba(0,0,0,0.6)', padding: '10px', zIndex: 1
-      }}>
-        Aero Health Monitor
-      </div>
+    <div>
+      <h2 style={{ position: "absolute", color: "white", margin: 10, zIndex: 10 }}>
+        Aero Health - Real-Time Anomaly
+      </h2>
       <Scene />
-    </>
+    </div>
   );
 }
 
