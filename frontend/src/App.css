@@ -1,0 +1,68 @@
+/* Add this new container */
+.app-container-relative {
+  position: relative; /* Crucial for positioning the background absolutely within it */
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Hide anything that overflows the background */
+  background-color: #1a1a1a; /* Keep the body background here as well for consistency */
+}
+
+/* Modify the existing body styles (keep centered layout, but background moves to .app-container-relative) */
+body {
+  margin: 0;
+  /* Removed: display: flex, place-items: center, min-width, min-height, justify-content, align-items, background-color, color */
+  /* These properties are now handled by .app-container-relative for the overall page layout */
+}
+
+
+/* Existing .app-center-container will now be positioned relative to .app-container-relative */
+.app-center-container {
+  display: flex;
+  flex-direction: column; /* Stacks sections vertically */
+  gap: 30px; /* Adds space between sections */
+  padding: 30px; /* Padding around the entire content */
+  max-width: 1200px; /* Limits the maximum width of the content */
+  width: 100%; /* Ensures it takes full width up to max-width */
+  box-sizing: border-box; /* Includes padding in the element's total width and height */
+  position: relative; /* Ensure this container is above the background */
+  z-index: 1; /* Make sure your content layers on top of the background */
+  background-color: transparent; /* Make the container background transparent if you want the 3D background to show through */
+}
+
+/* ... rest of your existing CSS for .section, h1, h2, a, button, .aerodynamics-form, etc. ... */
+
+/* Adjust root and body for light mode to ensure compatibility with the new wrapper */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    /* background-color: #ffffff; */ /* Removed from :root as it's now on .app-container-relative or individual sections */
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f0f0f0;
+    color: #213547;
+    border: 1px solid #d0d0d0;
+  }
+  button:hover {
+    background-color: #e0e0e0;
+    border-color: #c0c0c0;
+  }
+  .app-container-relative {
+    background-color: #f0f2f5; /* Light grey background for the page */
+    color: #333333;
+  }
+  .section {
+    background-color: #ffffff; /* White sections for light mode */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+  h1, h2 {
+    color: #007bff; /* Blue headings for light mode */
+  }
+  /* Ensure the background component also adapts if its materials are sensitive to light/dark themes */
+}

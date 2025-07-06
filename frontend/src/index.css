@@ -1,0 +1,305 @@
+/* General Body and Root Styles - Already good, just adding comments for context */
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center; /* Centers content vertically and horizontally if flex container allows */
+  min-width: 320px;
+  min-height: 100vh;
+  justify-content: center; /* Ensures content is centered horizontally */
+  align-items: center; /* Ensures content is centered vertically */
+  background-color: #1a1a1a; /* Darker background for the entire page */
+  color: #e0e0e0; /* Lighter text for better contrast on dark background */
+}
+
+/* App Container - New styles for overall layout */
+.app-center-container {
+  display: flex;
+  flex-direction: column; /* Stacks sections vertically */
+  gap: 30px; /* Adds space between sections */
+  padding: 30px; /* Padding around the entire content */
+  max-width: 1200px; /* Limits the maximum width of the content */
+  width: 100%; /* Ensures it takes full width up to max-width */
+  box-sizing: border-box; /* Includes padding in the element's total width and height */
+}
+
+/* Section Styling */
+.section {
+  background-color: #2c2c2c; /* Slightly lighter background for each section */
+  padding: 25px;
+  border-radius: 12px; /* Rounded corners for sections */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  border: 1px solid #3a3a3a; /* Light border for definition */
+}
+
+/* Heading Styles */
+h1 {
+  font-size: 3.8em; /* Slightly larger for main title */
+  line-height: 1.1;
+  color: #00bcd4; /* A shade of blue for headings to stand out */
+  text-align: center; /* Center the main title */
+  margin-bottom: 25px;
+  letter-spacing: 1px; /* A bit of letter spacing for style */
+}
+
+h2 {
+  font-size: 2.2em;
+  color: #00bcd4; /* Consistent heading color */
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center; /* Center section titles */
+}
+
+/* Link Styles */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+a:hover {
+  color: #535bf2;
+}
+
+/* Button Styles */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.8em 1.5em; /* Slightly more padding */
+  font-size: 1.1em; /* Slightly larger font */
+  font-weight: 600; /* Bolder font */
+  font-family: inherit;
+  background-color: #007bff; /* A nice blue for buttons */
+  color: white; /* White text on blue button */
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s, transform 0.1s ease; /* Add transform for subtle click effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Button shadow */
+}
+button:hover {
+  border-color: #0056b3; /* Darker border on hover */
+  background-color: #0056b3; /* Darker background on hover */
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 2px; /* Offset the outline */
+}
+
+/* Media Query for Light Theme - Adjust colors for light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f0f0f0; /* Lighter button for light mode */
+    color: #213547; /* Darker text for light mode buttons */
+    border: 1px solid #d0d0d0;
+  }
+  button:hover {
+    background-color: #e0e0e0;
+    border-color: #c0c0c0;
+  }
+  body {
+    background-color: #f0f2f5; /* Light grey background for the page */
+    color: #333333;
+  }
+  .section {
+    background-color: #ffffff; /* White sections for light mode */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+  h1, h2 {
+    color: #007bff; /* Blue headings for light mode */
+  }
+}
+
+/* You might need to add specific styles for PredictionCard, FeatureImportanceChart, and TelemetryTable components if they don't look good with the generic section styling. For example: */
+/* .prediction-card-container {
+    // specific styles for prediction card
+} */
+/* .feature-chart-container {
+    // specific styles for chart
+} */
+/* .telemetry-table-container {
+    // specific styles for table
+} */
+
+/* Add this to your index.css or a dedicated CSS file for PredictionCard */
+
+/* Container for the entire form */
+.aerodynamics-form {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  gap: 15px; /* Adds vertical space between form groups */
+  padding: 20px; /* Padding around the form content */
+  background-color: #2c2c2c; /* Matches your section background */
+  border-radius: 12px; /* Matches your section border-radius */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Matches your section shadow */
+  border: 1px solid #3a3a3a; /* Matches your section border */
+}
+
+/* Style for each label-input pair */
+.form-group {
+  display: flex;
+  flex-direction: column; /* Label and input stack vertically */
+  margin-bottom: 10px; /* Space between each form group */
+}
+
+.form-group label {
+  color: #e0e0e0; /* Lighter text for labels */
+  font-size: 1em;
+  margin-bottom: 5px; /* Space between label and input */
+  font-weight: 500;
+}
+
+.form-group input[type="number"],
+.form-group input[type="text"] { /* Target specific input types */
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #4a4a4a; /* Slightly lighter border for inputs */
+  background-color: #383838; /* Darker background for inputs */
+  color: #e0e0e0; /* Lighter text color inside input */
+  font-size: 1em;
+  width: 100%; /* Make inputs take full width of their container */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.form-group input[type="number"]:focus,
+.form-group input[type="text"]:focus {
+  outline: none; /* Remove default outline */
+  border-color: #00bcd4; /* Highlight border on focus */
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.4); /* Glow effect on focus */
+}
+
+/* Style for the Predict button - re-using existing button styles mostly */
+.aerodynamics-form button {
+  margin-top: 20px; /* Space above the button */
+  align-self: center; /* Center the button within the flex container */
+  width: auto; /* Allow button to size according to content */
+  padding: 12px 30px; /* More padding for a prominent button */
+  font-size: 1.2em; /* Slightly larger text */
+}
+
+/* Heading for the form */
+.form-title {
+  font-size: 2.8em; /* Adjusted size for form title */
+  color: #00bcd4; /* Consistent heading color */
+  text-align: center; /* Center the title */
+  margin-bottom: 30px; /* More space below the title */
+  margin-top: 0;
+}
+
+/* Media Query for Light Theme adjustments */
+@media (prefers-color-scheme: light) {
+  .aerodynamics-form {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group label {
+    color: #333333;
+  }
+
+  .form-group input[type="number"],
+  .form-group input[type="text"] {
+    background-color: #f9f9f9;
+    border: 1px solid #d0d0d0;
+    color: #213547;
+  }
+
+  .form-group input[type="number"]:focus,
+  .form-group input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+}
+
+/* Add this new container */
+.app-container-relative {
+  position: relative; /* Crucial for positioning the background absolutely within it */
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Hide anything that overflows the background */
+  background-color: #1a1a1a; /* Keep the body background here as well for consistency */
+}
+
+/* Modify the existing body styles (keep centered layout, but background moves to .app-container-relative) */
+body {
+  margin: 0;
+  /* Removed: display: flex, place-items: center, min-width, min-height, justify-content, align-items, background-color, color */
+  /* These properties are now handled by .app-container-relative for the overall page layout */
+}
+
+
+/* Existing .app-center-container will now be positioned relative to .app-container-relative */
+.app-center-container {
+  display: flex;
+  flex-direction: column; /* Stacks sections vertically */
+  gap: 30px; /* Adds space between sections */
+  padding: 30px; /* Padding around the entire content */
+  max-width: 1200px; /* Limits the maximum width of the content */
+  width: 100%; /* Ensures it takes full width up to max-width */
+  box-sizing: border-box; /* Includes padding in the element's total width and height */
+  position: relative; /* Ensure this container is above the background */
+  z-index: 1; /* Make sure your content layers on top of the background */
+  background-color: transparent; /* Make the container background transparent if you want the 3D background to show through */
+}
+
+/* ... rest of your existing CSS for .section, h1, h2, a, button, .aerodynamics-form, etc. ... */
+
+/* Adjust root and body for light mode to ensure compatibility with the new wrapper */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    /* background-color: #ffffff; */ /* Removed from :root as it's now on .app-container-relative or individual sections */
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f0f0f0;
+    color: #213547;
+    border: 1px solid #d0d0d0;
+  }
+  button:hover {
+    background-color: #e0e0e0;
+    border-color: #c0c0c0;
+  }
+  .app-container-relative {
+    background-color: #f0f2f5; /* Light grey background for the page */
+    color: #333333;
+  }
+  .section {
+    background-color: #ffffff; /* White sections for light mode */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+  h1, h2 {
+    color: #007bff; /* Blue headings for light mode */
+  }
+  /* Ensure the background component also adapts if its materials are sensitive to light/dark themes */
+}
