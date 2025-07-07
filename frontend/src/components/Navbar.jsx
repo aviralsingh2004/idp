@@ -19,12 +19,18 @@ export default function Navbar() {
       boxSizing: 'border-box',
       margin: 0
     }}>
+      <Link to="/home" style={{
+        color: location.pathname === '/home' ? '#90caf9' : '#fff',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        fontSize: '18px'
+      }}>Home</Link>
       <Link to="/" style={{
         color: location.pathname === '/' ? '#90caf9' : '#fff',
         textDecoration: 'none',
         fontWeight: 'bold',
         fontSize: '18px'
-      }}>Home</Link>
+      }}>Dashboard</Link>
       <Link to="/simulation" style={{
         color: location.pathname === '/simulation' ? '#90caf9' : '#fff',
         textDecoration: 'none',

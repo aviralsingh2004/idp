@@ -23,13 +23,13 @@ body {
   min-height: 100vh;
   justify-content: center; /* Ensures content is centered horizontally */
   align-items: center; /* Ensures content is centered vertically */
-  background: linear-gradient(120deg, #232526 0%, #414345 100%);
+  background: linear-gradient(120deg, #0a0a23 0%, #0e1a2b 50%, #012a36 100%);
   transition: background 0.8s cubic-bezier(0.4,0,0.2,1);
   color: #fff;
   scroll-behavior: smooth;
 }
 body:hover {
-  background: linear-gradient(120deg, #2c2f36 0%, #49505a 100%);
+  background: linear-gradient(120deg, #10102a 0%, #15304a 50%, #014a5a 100%);
 }
 
 /* App Container - New styles for overall layout */
