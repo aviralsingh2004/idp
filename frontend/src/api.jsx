@@ -1,7 +1,16 @@
 import axios from 'axios'
 
 // existing
-export const predictAero           = params => axios.post('/api/predict', params).then(r => r.data)
+export async function predictAero(inputs) {
+  try {
+    const response = await axios.post('http://localhost:5000/api/predict', inputs);
+    return response.data;
+  } catch (error) {
+    console.error('Prediction API error:', error);
+    throw error;
+  }
+}
+
 export const getFeatureImportance  = ()     => axios.get('/api/feature-importance').then(r => r.data)
 export const getTelemetryComparison= ()     => axios.get('/api/telemetry-comparison').then(r => r.data)
 

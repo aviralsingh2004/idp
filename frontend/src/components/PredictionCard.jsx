@@ -10,21 +10,33 @@ export default function PredictionCard() {
     Speed_Diffusor_Product: 720, Length_Width_Ratio: 1.2
   });
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = e => setInputs({
-    ...inputs,
-    [e.target.name]: parseFloat(e.target.value)
-  });
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: parseFloat(e.target.value)
+    });
+  };
 
-  const onSubmit = e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    predictAero(inputs).then(setResult);
+    setLoading(true);
+    try {
+      const res = await predictAero(inputs);
+      setResult(res);
+    } catch (err) {
+      console.error('Prediction error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form className="aerodynamics-form" onSubmit={onSubmit}>
       <div className="form-title">Predict Aerodynamics</div>
-      {Object.keys(inputs).map(key => (
+
+      {Object.keys(inputs).map((key) => (
         <div className="form-group" key={key}>
           <label htmlFor={key}>{key}:</label>
           <input
@@ -37,12 +49,28 @@ export default function PredictionCard() {
           />
         </div>
       ))}
-      <button type="submit">Predict</button>
+
+      <button type="submit" disabled={loading}>
+        {loading ? 'Predicting...' : 'Predict'}
+      </button>
+
       {result && (
-        <div style={{ marginTop: '20px', textAlign: 'center' }}>
-          <p>Cd: {result.cd.toFixed(4)}</p>
-          <p>Downforce: {result.downforce_level}</p>
-          <p>Suggestion: {result.suggestion}</p>
+        <div className="prediction-result" style={{ marginTop: '20px', textAlign: 'center' }}>
+          <p><strong>Cd:</strong> {result.cd.toFixed(4)}</p>
+          <p><strong>Downforce:</strong> {result.downforce_level}</p>
+          <p><strong>Suggestion:</strong> {result.suggestion}</p>
+          <hr style={{ margin: '20px 0' }} />
+          <div style={{
+            padding: '15px',
+            borderRadius: '8px',
+            textAlign: 'left',
+            maxWidth: '600px',
+            margin: 'auto',
+            fontStyle: 'italic'
+          }}>
+            <strong>AI Summary:</strong>
+            <p>{result.analysis}</p>
+          </div>
         </div>
       )}
     </form>

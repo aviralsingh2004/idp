@@ -1,50 +1,75 @@
-# backend/app.py
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import fastf1
-
+import json
+from groq import Groq
 from utils import predict_aero, get_feature_importance
+import os   
+import dotenv  
+# Load environment variables
+dotenv.load_dotenv()
+# Ensure the environment variable is set
+if not os.environ.get('GROQ_API_KEY'):
+    raise ValueError("GROQ_API_KEY environment variable is not set. Please set it in the .env file.")
+# Initialize Groq client
+groq_client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
+MODEL = "llama3-70b-8192"
 
+# Initialize Flask
 app = Flask(__name__)
 CORS(app)
 
-# enable FastF1 cache directory
+# Enable FastF1 cache
 fastf1.Cache.enable_cache('./f1_cache')
 
 
-@app.route('/api/predict', methods=['POST'])
+@app.route("/api/predict", methods=["POST"])
 def api_predict():
-    """
-    Expects JSON body with keys matching FEATURES:
-      {
-        "Speed_kmph": float,
-        "B_Ramp_Angle": float,
-        ... (all 11 features)
-      }
-    Returns: { cd, downforce_level, suggestion }
-    """
     params = request.get_json() or {}
-    result = predict_aero(params)
-    return jsonify(result), 200
+    basic = predict_aero(params)
+
+    # Generate prompt for Groq
+    system_prompt = (
+        "You are an expert F1 aerodynamics analyst. "
+        "You will be provided with aerodynamic prediction results in JSON. "
+        "Return a JSON response in the format: {\"analysis\": \"...\"}, where the value is a paragraph summarizing the aerodynamic impact and car behavior."
+    )
+    user_prompt = (
+        f"Prediction result: {json.dumps(basic)}\n"
+        "Return a JSON object as specified above."
+    )
+
+    try:
+        resp = groq_client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={"type": "json_object"}
+        )
+        raw_output = resp.choices[0].message.content
+        print("Groq raw output:", raw_output)
+
+        summary_text = json.loads(raw_output).get("analysis") if isinstance(raw_output, str) else raw_output
+    except Exception as e:
+        print("Groq error:", str(e))
+        summary_text = "Error generating summary: " + str(e)
+
+    return jsonify({
+        **basic,
+        "analysis": summary_text
+    }), 200
 
 
 @app.route('/api/feature-importance', methods=['GET'])
 def api_feature_importance():
-    """
-    Returns the RandomForest feature importances used in predict_aero.
-    """
     fi = get_feature_importance()
     return jsonify(fi), 200
 
 
 @app.route('/api/telemetry-comparison', methods=['GET'])
 def api_telemetry_comparison():
-    """
-    Compares each driver's fastest lap telemetry vs. ideal values.
-    Returns a list of:
-      { team, turn, speed_diff, gear_diff, throttle_diff, brake_diff }
-    """
     session = fastf1.get_session(2023, 'Monza', 'R')
     session.load(telemetry=True)
 
@@ -72,12 +97,12 @@ def api_telemetry_comparison():
         avg = {c: tel[c].mean() for c in required}
         for turn_name, iv in ideal.items():
             result.append({
-                'team':           team,
-                'turn':           turn_name,
-                'speed_diff':     abs(avg['Speed']    - iv['Speed']),
-                'gear_diff':      abs(avg['nGear']    - iv['nGear']),
-                'throttle_diff':  abs(avg['Throttle'] - iv['Throttle']),
-                'brake_diff':     abs(avg['Brake']    - iv['Brake']),
+                'team': team,
+                'turn': turn_name,
+                'speed_diff': abs(avg['Speed'] - iv['Speed']),
+                'gear_diff': abs(avg['nGear'] - iv['nGear']),
+                'throttle_diff': abs(avg['Throttle'] - iv['Throttle']),
+                'brake_diff': abs(avg['Brake'] - iv['Brake']),
             })
 
     return jsonify(result), 200
@@ -85,20 +110,11 @@ def api_telemetry_comparison():
 
 @app.route('/api/raw-telemetry', methods=['GET'])
 def api_raw_telemetry():
-    """
-    Streams one lap's raw suspension or fallback telemetry:
-      - lapTime: seconds since start
-      - wingAngle: SuspensionTravelRL or fallback from Speed
-      - bodyFlex:  SuspensionTravelRR or fallback from Brake
-    Query params:
-      year, gp (Grand Prix name), session, lap (1-based index)
-    """
-    year    = int(request.args.get('year', 2023))
-    gp      = request.args.get('gp', 'Italian Grand Prix')
+    year = int(request.args.get('year', 2023))
+    gp = request.args.get('gp', 'Italian Grand Prix')
     session = request.args.get('session', 'Race')
-    lap_no  = int(request.args.get('lap', 1))
+    lap_no = int(request.args.get('lap', 1))
 
-    # load session
     sess = fastf1.get_session(year, gp, session)
     sess.load(telemetry=True)
 
@@ -110,11 +126,10 @@ def api_raw_telemetry():
     tel = lap.get_car_data().add_distance()
     cols = tel.columns
 
-    # find real suspension channels if present
-    rl_key = next((c for c in cols if 'SuspensionTravelRL' in c), None) \
-             or next((c for c in cols if c == 'SuspensionRL'), None)
-    rr_key = next((c for c in cols if 'SuspensionTravelRR' in c), None) \
-             or next((c for c in cols if c == 'SuspensionRR'), None)
+    rl_key = next((c for c in cols if 'SuspensionTravelRL' in c), None) or \
+             next((c for c in cols if c == 'SuspensionRL'), None)
+    rr_key = next((c for c in cols if 'SuspensionTravelRR' in c), None) or \
+             next((c for c in cols if c == 'SuspensionRR'), None)
 
     use_fallback = not (rl_key and rr_key)
     if use_fallback:
@@ -127,16 +142,16 @@ def api_raw_telemetry():
         if use_fallback:
             speed = float(row.get('Speed', 0))
             brake = float(row.get('Brake', 0))
-            wing  = round((1 - speed / max_speed) * 30.0, 2)
-            flex  = round(brake * 5.0, 2)
+            wing = round((1 - speed / max_speed) * 30.0, 2)
+            flex = round(brake * 5.0, 2)
         else:
-            wing  = float(row.get(rl_key, 0))
-            flex  = float(row.get(rr_key, 0))
+            wing = float(row.get(rl_key, 0))
+            flex = float(row.get(rr_key, 0))
 
         data.append({
-            'lapTime':  round(t, 3),
+            'lapTime': round(t, 3),
             'wingAngle': wing,
-            'bodyFlex':  flex
+            'bodyFlex': flex
         })
         t += dt
 
