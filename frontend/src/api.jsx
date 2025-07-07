@@ -10,7 +10,8 @@ export async function predictAero(inputs) {
     throw error;
   }
 }
-
+export const fetchTrackPositions = (params) =>
+  axios.get('http://localhost:5000/api/track-positions', { params }).then(res => res.data);
 export const getFeatureImportance  = ()     => axios.get('/api/feature-importance').then(r => r.data)
 export const getTelemetryComparison= ()     => axios.get('/api/telemetry-comparison').then(r => r.data)
 

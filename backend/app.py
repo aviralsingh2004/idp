@@ -1,34 +1,30 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import fastf1
+import pandas as pd
 import json
 from groq import Groq
 from utils import predict_aero, get_feature_importance
-import os   
-import dotenv  
+import os
+import dotenv
+
 # Load environment variables
 dotenv.load_dotenv()
-# Ensure the environment variable is set
 if not os.environ.get('GROQ_API_KEY'):
     raise ValueError("GROQ_API_KEY environment variable is not set. Please set it in the .env file.")
-# Initialize Groq client
+
 groq_client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 MODEL = "llama3-70b-8192"
 
-# Initialize Flask
 app = Flask(__name__)
 CORS(app)
-
-# Enable FastF1 cache
 fastf1.Cache.enable_cache('./f1_cache')
-
 
 @app.route("/api/predict", methods=["POST"])
 def api_predict():
     params = request.get_json() or {}
     basic = predict_aero(params)
 
-    # Generate prompt for Groq
     system_prompt = (
         "You are an expert F1 aerodynamics analyst. "
         "You will be provided with aerodynamic prediction results in JSON. "
@@ -61,22 +57,65 @@ def api_predict():
         "analysis": summary_text
     }), 200
 
-
 @app.route('/api/feature-importance', methods=['GET'])
 def api_feature_importance():
     fi = get_feature_importance()
     return jsonify(fi), 200
+import traceback
 
+@app.route('/api/track-positions', methods=['GET'])
+def api_track_positions():
+    try:
+        year    = int(request.args.get('year', 2023))
+        gp      = request.args.get('gp', 'Italian Grand Prix')
+        session = request.args.get('session', 'Race')
+        driver  = request.args.get('driver', 'VER')
+        lap_no  = int(request.args.get('lap', 1))
+
+        sess = fastf1.get_session(year, gp, session)
+        sess.load(telemetry=True)
+
+        laps = sess.laps.pick_drivers([driver])
+        if lap_no < 1 or lap_no > len(laps):
+            return jsonify([]), 200
+
+        lap = laps.iloc[lap_no - 1]
+
+        # Fetch position and speed data separately
+        pos_data = lap.get_pos_data()
+        car_data = lap.get_car_data()
+
+        import pandas as pd
+
+        # Merge by timestamp
+        merged = pd.merge_asof(pos_data, car_data, on='Time')
+
+        output = [
+            {
+                'X': float(row['X']),
+                'Y': float(row['Y']),
+                'Speed': float(row['Speed']) if not pd.isna(row['Speed']) else 0.0
+            }
+            for _, row in merged.iterrows()
+            if not pd.isna(row['X']) and not pd.isna(row['Y'])
+        ]
+
+        return jsonify(output), 200
+
+    except Exception as e:
+        import traceback
+        print("\n[TRACK POSITION ERROR]")
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/telemetry-comparison', methods=['GET'])
 def api_telemetry_comparison():
     session = fastf1.get_session(2023, 'Monza', 'R')
     session.load(telemetry=True)
-
     required = ['Speed', 'nGear', 'Throttle', 'Brake']
     ideal = {
-        'Straight':          {'Speed': 320, 'nGear': 8, 'Throttle': 1.0, 'Brake': 0.0},
-        'Low-Speed Turn':    {'Speed': 160, 'nGear': 3, 'Throttle': 0.5, 'Brake': 0.5},
+        'Straight': {'Speed': 320, 'nGear': 8, 'Throttle': 1.0, 'Brake': 0.0},
+        'Low-Speed Turn': {'Speed': 160, 'nGear': 3, 'Throttle': 0.5, 'Brake': 0.5},
         'Medium-Speed Turn': {'Speed': 180, 'nGear': 5, 'Throttle': 0.7, 'Brake': 0.3},
     }
 
@@ -107,7 +146,6 @@ def api_telemetry_comparison():
 
     return jsonify(result), 200
 
-
 @app.route('/api/raw-telemetry', methods=['GET'])
 def api_raw_telemetry():
     year = int(request.args.get('year', 2023))
@@ -126,10 +164,8 @@ def api_raw_telemetry():
     tel = lap.get_car_data().add_distance()
     cols = tel.columns
 
-    rl_key = next((c for c in cols if 'SuspensionTravelRL' in c), None) or \
-             next((c for c in cols if c == 'SuspensionRL'), None)
-    rr_key = next((c for c in cols if 'SuspensionTravelRR' in c), None) or \
-             next((c for c in cols if c == 'SuspensionRR'), None)
+    rl_key = next((c for c in cols if 'SuspensionTravelRL' in c), None) or next((c for c in cols if c == 'SuspensionRL'), None)
+    rr_key = next((c for c in cols if 'SuspensionTravelRR' in c), None) or next((c for c in cols if c == 'SuspensionRR'), None)
 
     use_fallback = not (rl_key and rr_key)
     if use_fallback:
@@ -137,7 +173,6 @@ def api_raw_telemetry():
 
     data = []
     t, dt = 0.0, 0.1
-
     for _, row in tel.iterrows():
         if use_fallback:
             speed = float(row.get('Speed', 0))
@@ -156,7 +191,6 @@ def api_raw_telemetry():
         t += dt
 
     return jsonify(data), 200
-
 
 if __name__ == '__main__':
     app.run(debug=True)
