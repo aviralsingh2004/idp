@@ -5,3 +5,5 @@ scikit-learn==1.2.2
 xgboost==1.7.5
 joblib==1.2.0
 numpy==1.24.2
+torch
+fastf1
