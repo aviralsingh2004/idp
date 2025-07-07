@@ -23,8 +23,13 @@ body {
   min-height: 100vh;
   justify-content: center; /* Ensures content is centered horizontally */
   align-items: center; /* Ensures content is centered vertically */
-  background-color: #1a1a1a; /* Darker background for the entire page */
-  color: #e0e0e0; /* Lighter text for better contrast on dark background */
+  background: linear-gradient(120deg, #232526 0%, #414345 100%);
+  transition: background 0.8s cubic-bezier(0.4,0,0.2,1);
+  color: #fff;
+  scroll-behavior: smooth;
+}
+body:hover {
+  background: linear-gradient(120deg, #2c2f36 0%, #49505a 100%);
 }
 
 /* App Container - New styles for overall layout */
@@ -303,4 +308,30 @@ body {
     color: #007bff; /* Blue headings for light mode */
   }
   /* Ensure the background component also adapts if its materials are sensitive to light/dark themes */
+}
+
+/* Optional: ensure app containers are transparent to show bg */
+.app-container-relative, .app-center-container {
+  background: transparent !important;
+}
+
+/* Card/tile glow effect */
+.prediction-card-tile,
+.telemetry-table-tile,
+.simulation-dashboard-tile,
+.feature-importance-tile {
+  box-shadow:
+    0 2px 8px 0 rgba(0,0,0,0.18),
+    0 0 6px 1px #1976d2cc;
+  border: 1.5px solid #1976d2 !important;
+  transition: box-shadow 0.3s;
+}
+
+.prediction-card-tile:hover,
+.telemetry-table-tile:hover,
+.simulation-dashboard-tile:hover,
+.feature-importance-tile:hover {
+  box-shadow:
+    0 4px 16px 0 rgba(0,0,0,0.22),
+    0 0 14px 2px #00e5ffcc;
 }
