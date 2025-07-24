@@ -16,7 +16,7 @@ function Home() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-      style={{ minHeight: '100vh', width: '100vw', position: 'relative', overflow: 'hidden' }}
+      style={{ minHeight: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', marginTop: 60 }}
     >
       <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
         <Hyperspeed
@@ -132,8 +132,9 @@ function Dashboard() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      style={{ marginTop: 60 }}
     >
-      <div className="app-container-relative" style={{ marginTop: 60 }}>
+      <div className="app-container-relative">
         <AerodynamicsBackground />
         <div className="app-center-container">
           <div className="section"><h1>F1 Aero Dashboard</h1></div>
@@ -154,8 +155,9 @@ export default function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/simulation" element={<SimulationDashboard />} />
       </Routes>
     </Router>

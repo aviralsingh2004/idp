@@ -4,7 +4,7 @@ import {
   LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, Legend
 } from 'recharts';
-import TrackAnimation from './TrackAnimation';
+import Track3D from './Track3D';
 import { fetchRawTelemetry, fetchTrackPositions } from '../api';
 
 export default function SimulationDashboard() {
@@ -91,7 +91,7 @@ export default function SimulationDashboard() {
           <circle cx={car.X} cy={car.Y} r="5" fill="red" />
         </svg> */}
         <div style={{ marginTop: 32 }}>
-  <TrackAnimation
+  <Track3D
     year={params.year}
     gp={params.gp}
     session={params.session}
