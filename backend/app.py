@@ -17,8 +17,9 @@ groq_client = Groq(api_key=os.environ.get('GROQ_API_KEY'))
 MODEL = "llama3-70b-8192"
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 fastf1.Cache.enable_cache('./f1_cache')
+
 
 @app.route("/api/predict", methods=["POST"])
 def api_predict():

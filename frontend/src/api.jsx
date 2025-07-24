@@ -26,3 +26,14 @@ export function fetchRawTelemetry({ year=2023, gp='Italian Grand Prix', session=
     .get('/api/raw-telemetry', { params: { year, gp, session, lap } })
     .then(res => res.data)
 }
+
+export async function fetchAeroAnalysis(params) {
+  // Calls /api/predict and returns the full response data
+  try {
+    const response = await axios.post('http://localhost:5000/api/predict', params);
+    return response.data;
+  } catch (error) {
+    console.error('Aero Analysis API error:', error);
+    return { analysis: 'Error fetching analysis.' };
+  }
+}

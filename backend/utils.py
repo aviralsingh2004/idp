@@ -23,9 +23,8 @@ def predict_aero(params: dict):
     Xs = scaler.transform(df)
     cd_pred = float(grid_cd.predict(Xs)[0])
     lvl = int(round(rf_df_cls.predict(Xs)[0]))
-    sug = ("Keep wing angle low for less drag (straight)" if params['Speed_kmph']>300
-           else "Moderate wing angle, optimize for balance" if params['Speed_kmph']>150
-           else "Increase wing angle for maximum downforce (turns)")
+    speed = float(params.get('Speed_kmph', 0))  # default = 0
+    sug = "Keep wing angle low for less drag (straight)" if speed > 300 else "Keep wing angle high for more downforce (corners)"
     return {'cd': cd_pred, 'downforce_level': ['Low','Medium','High'][lvl], 'suggestion': sug}
 
 def get_feature_importance():

@@ -14,57 +14,63 @@ export default function Navbar() {
       width: '100vw',
       left: 0,
       top: 0,
-      background: 'rgba(34, 34, 50, 0.7)',
-      color: '#fff',
-      padding: '16px 32px',
+      background: 'var(--bg-card)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      color: 'var(--text-primary)',
+      padding: 'var(--spacing-md) var(--spacing-xl)',
       display: 'flex',
       alignItems: 'center',
-      gap: '32px',
-      position: 'sticky',
+      gap: 'var(--spacing-xl)',
+      position: 'fixed',
       zIndex: 1000,
       boxSizing: 'border-box',
       margin: 0,
-      height: 60,
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      boxShadow: '0 4px 24px 0 rgba(0,0,0,0.12)'
+      height: 'var(--spacing-3xl)',
+      border: 'none',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      boxShadow: 'var(--shadow-md)'
     }}>
       {/* Logo/Icon */}
-      <div style={{ display: 'flex', alignItems: 'center', marginRight: 32 }}>
-        <span style={{ fontSize: 28, fontWeight: 900, color: '#FFEB00', marginRight: 8 }}>🏎️</span>
-        <span style={{ fontWeight: 700, fontSize: 20, letterSpacing: 1, color: '#fff' }}>Aero Health</span>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        marginRight: 'var(--spacing-xl)' 
+      }}>
+        <span style={{ 
+          fontSize: '1.75rem', 
+          fontWeight: 900, 
+          color: 'var(--color-accent)', 
+          marginRight: 'var(--spacing-sm)' 
+        }}>🏎️</span>
+        <span style={{ 
+          fontWeight: 700, 
+          fontSize: '1.25rem', 
+          letterSpacing: '0.05em', 
+          color: 'var(--text-primary)' 
+        }}>Aero Health</span>
       </div>
-      <div style={{ display: 'flex', gap: 24 }}>
+      <div style={{ display: 'flex', gap: 'var(--spacing-lg)' }}>
         {navLinks.map(link => (
           <Link
             key={link.to}
             to={link.to}
             style={{
-              color: location.pathname === link.to ? '#FFEB00' : '#fff',
+              color: location.pathname === link.to ? 'var(--color-accent)' : 'var(--text-secondary)',
               textDecoration: 'none',
-              fontWeight: 'bold',
-              fontSize: '18px',
+              fontWeight: 600,
+              fontSize: '1rem',
               position: 'relative',
-              transition: 'color 0.2s',
-              paddingBottom: 4
+              transition: 'all 0.2s ease',
+              padding: 'var(--spacing-sm) var(--spacing-md)',
+              borderRadius: 'var(--border-radius-sm)',
+              background: location.pathname === link.to ? 'rgba(255, 235, 59, 0.1)' : 'transparent'
             }}
           >
             {link.label}
-            {location.pathname === link.to && (
-              <span style={{
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                width: '100%',
-                height: 3,
-                background: 'linear-gradient(90deg, #FFEB00 0%, #C3002F 100%)',
-                borderRadius: 2,
-                transition: 'all 0.3s'
-              }} />
-            )}
           </Link>
         ))}
       </div>
     </nav>
   );
-} 
+}

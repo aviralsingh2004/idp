@@ -16,7 +16,13 @@ function Home() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-      style={{ minHeight: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', marginTop: 60 }}
+      style={{ 
+        minHeight: '100vh', 
+        width: '100vw', 
+        position: 'relative', 
+        overflow: 'hidden', 
+        marginTop: 'var(--spacing-3xl)' 
+      }}
     >
       <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
         <Hyperspeed
@@ -60,63 +66,76 @@ function Home() {
         />
         <div style={{
           position: 'absolute',
-          top: 120,
+          top: 'var(--spacing-3xl)',
           left: 0,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          gap: '48px',
+          gap: 'var(--spacing-2xl)',
           pointerEvents: 'none',
-          zIndex: 2
+          zIndex: 2,
+          padding: '0 var(--spacing-lg)'
         }}>
           <div style={{
-            background: 'rgba(20,20,30,0.75)',
-            borderRadius: 16,
-            padding: '28px 32px',
-            color: '#fff',
-            minWidth: 260,
-            maxWidth: 320,
-            boxShadow: '0 2px 12px 0 #C3002F55',
-            border: '1.5px solid #C3002F',
-            pointerEvents: 'auto',
-            backdropFilter: 'blur(2px)'
+            background: 'var(--bg-card)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 'var(--border-radius-lg)',
+            padding: 'var(--spacing-xl)',
+            color: 'var(--text-primary)',
+            maxWidth: '320px',
+            boxShadow: 'var(--shadow-md), var(--shadow-glow)',
+            border: '1px solid rgba(195, 0, 47, 0.3)',
+            pointerEvents: 'auto'
           }}>
-            <h2 style={{ color: '#FFEB00', fontWeight: 700, fontSize: 22, marginBottom: 10 }}>F1 Aero Dashboard</h2>
-            <p style={{ fontSize: 16, color: '#fff' }}>
+            <h2 style={{ 
+              color: 'var(--color-accent)', 
+              fontWeight: 700, 
+              fontSize: '1.375rem', 
+              marginBottom: 'var(--spacing-sm)' 
+            }}>F1 Aero Dashboard</h2>
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
               Explore Formula 1 aerodynamics, car telemetry, and AI-powered predictions in a visually immersive dashboard.
             </p>
           </div>
           <div style={{
-            background: 'rgba(20,20,30,0.75)',
-            borderRadius: 16,
-            padding: '28px 32px',
-            color: '#fff',
-            minWidth: 260,
-            maxWidth: 320,
-            boxShadow: '0 2px 12px 0 #C3002F55',
-            border: '1.5px solid #C3002F',
-            pointerEvents: 'auto',
-            backdropFilter: 'blur(2px)'
+            background: 'var(--bg-card)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 'var(--border-radius-lg)',
+            padding: 'var(--spacing-xl)',
+            color: 'var(--text-primary)',
+            maxWidth: '320px',
+            boxShadow: 'var(--shadow-md), var(--shadow-glow)',
+            border: '1px solid rgba(195, 0, 47, 0.3)',
+            pointerEvents: 'auto'
           }}>
-            <h2 style={{ color: '#FFEB00', fontWeight: 700, fontSize: 22, marginBottom: 10 }}>AI Insights</h2>
-            <p style={{ fontSize: 16, color: '#fff' }}>
+            <h2 style={{ 
+              color: 'var(--color-accent)', 
+              fontWeight: 700, 
+              fontSize: '1.375rem', 
+              marginBottom: 'var(--spacing-sm)' 
+            }}>AI Insights</h2>
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
               Get real-time predictions and feature importance analysis powered by advanced machine learning models.
             </p>
           </div>
           <div style={{
-            background: 'rgba(20,20,30,0.75)',
-            borderRadius: 16,
-            padding: '28px 32px',
-            color: '#fff',
-            minWidth: 260,
-            maxWidth: 320,
-            boxShadow: '0 2px 12px 0 #C3002F55',
-            border: '1.5px solid #C3002F',
-            pointerEvents: 'auto',
-            backdropFilter: 'blur(2px)'
+            background: 'var(--bg-card)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 'var(--border-radius-lg)',
+            padding: 'var(--spacing-xl)',
+            color: 'var(--text-primary)',
+            maxWidth: '320px',
+            boxShadow: 'var(--shadow-md), var(--shadow-glow)',
+            border: '1px solid rgba(195, 0, 47, 0.3)',
+            pointerEvents: 'auto'
           }}>
-            <h2 style={{ color: '#FFEB00', fontWeight: 700, fontSize: 22, marginBottom: 10 }}>Simulation & Telemetry</h2>
-            <p style={{ fontSize: 16, color: '#fff' }}>
+            <h2 style={{ 
+              color: 'var(--color-accent)', 
+              fontWeight: 700, 
+              fontSize: '1.375rem', 
+              marginBottom: 'var(--spacing-sm)' 
+            }}>Simulation & Telemetry</h2>
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
               Simulate race conditions, compare telemetry, and visualize car performance with interactive charts.
             </p>
           </div>
@@ -132,13 +151,17 @@ function Dashboard() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-      style={{ marginTop: 60 }}
+      style={{ marginTop: 'var(--spacing-3xl)' }}
     >
       <div className="app-container-relative">
         <AerodynamicsBackground />
         <div className="app-center-container">
-          <div className="section"><h1>F1 Aero Dashboard</h1></div>
-          <div className="section"><PredictionCard/></div>
+          <div className="section">
+            <h1>F1 Aero Dashboard</h1>
+          </div>
+          <div className="section">
+            <PredictionCard/>
+          </div>
           <div className="section">
             <h2>Feature Importance</h2>
             <FeatureImportanceChart/>
